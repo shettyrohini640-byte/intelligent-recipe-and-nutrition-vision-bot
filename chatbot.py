@@ -96,10 +96,21 @@ def get_nutrition(recipe):
         "protein": ("Protein", " g"),
         "carbs": ("Carbohydrates", " g"),
         "fat": ("Fat", " g"),
-        "fibre": ("Fibre", " g")
+        "fibre": ("Fibre", " g"),
+        "fiber": ("Fibre", " g"),
+        "sugar": ("Sugar", " g")
     }
 
     lines = []
+
+    for key, (label, unit) in labels.items():
+        if key in nutrition:
+            lines.append(f"• {label}: {nutrition[key]}{unit}")
+
+    if not lines:
+        return "Nutrition information is unavailable."
+
+    return "\n".join(lines)
 
     for key, (label, unit) in labels.items():
         if key in nutrition:
@@ -145,30 +156,49 @@ def answer_question(message):
 
     name = recipe.get("name", "This recipe")
 
-    # Nutrition questions must be handled before general description questions.
+       # Nutrition questions must be handled before general description questions.
     nutrition_words = [
-        "nutrition", "nutritional", "calorie", "calories",
-        "protein", "carbs", "carbohydrate", "fat", "fibre", "fiber"
+        "nutrition", "nutritional",
+        "calorie", "calories", "kcal", "energy",
+        "protein", "carb", "carbs",
+        "carbohydrate", "carbohydrates",
+        "fat", "fats", "fibre", "fiber",
+        "nutrient", "nutrients", "macro", "macros"
     ]
 
     if any(word in question for word in nutrition_words):
         nutrition = recipe.get("nutrition", {})
 
-        if isinstance(nutrition, dict):
-            for key, label in [
-                ("calories", "Calories"),
-                ("protein", "Protein"),
-                ("carbs", "Carbohydrates"),
-                ("fat", "Fat"),
-                ("fibre", "Fibre")
-            ]:
-                if key in question and key in nutrition:
-                    value = nutrition[key]
-                    unit = " kcal" if key == "calories" else " g"
-                    return (
-                        f"{label} in {name}: {value}{unit} "
-                        "(estimated per serving)."
+        if not isinstance(nutrition, dict) or not nutrition:
+            return f"Nutrition information is not available for {name}."
+
+        requested_nutrients = [
+            (["calorie", "calories", "kcal", "energy"], "calories", "Calories", " kcal"),
+            (["protein"], "protein", "Protein", " g"),
+            (["carb", "carbs", "carbohydrate", "carbohydrates"], "carbs", "Carbohydrates", " g"),
+            (["fat", "fats"], "fat", "Fat", " g"),
+            (["fibre", "fiber"], "fibre", "Fibre", " g")
+        ]
+
+        requested = []
+
+        for terms, key, label, unit in requested_nutrients:
+            if any(term in question for term in terms):
+                if key in nutrition:
+                    requested.append(
+                        f"• {label}: {nutrition[key]}{unit}"
                     )
+
+        if requested:
+            return (
+                f"Estimated nutrition for {name} per serving:\n"
+                + "\n".join(requested)
+            )
+
+        return (
+            f"Estimated nutrition for {name} per serving:\n"
+            f"{get_nutrition(recipe)}"
+        )
 
         return (
             f"Estimated nutrition for {name} per serving:\n"

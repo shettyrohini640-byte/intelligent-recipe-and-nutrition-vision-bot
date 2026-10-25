@@ -233,14 +233,842 @@ ul, ol { padding-left: 23px; line-height: 1.7; }
     margin-bottom: 15px;
 }
 footer { text-align: center; color: var(--muted); padding: 0 20px 30px; }
+/* ===== RecipeVision header and food banner ===== */
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px 6%;
+    background: #ffffff;
+    color: #39275f;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #39275f;
+    font-size: 25px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.brand-icon {
+    background: #f0e8ff;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 28px;
+}
+
+.brand-highlight {
+    color: #8b5cf6;
+}
+
+.main-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.main-nav a {
+    color: #5d5078;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.main-nav a:hover {
+    color: #8b5cf6;
+}
+
+.healthy-badge {
+    color: #6b568e;
+    font-size: 14px;
+}
+
+.hero-banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 30px;
+    width: min(1100px, 92%);
+    margin: 30px auto;
+    padding: 35px;
+    background: linear-gradient(135deg, #f4edff, #ffffff);
+    border: 1px solid #e8ddff;
+    border-radius: 25px;
+}
+
+.hero-banner h1 {
+    color: #30204f;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.2;
+}
+
+.hero-banner p {
+    color: #716780;
+    line-height: 1.8;
+}
+
+.hero-label {
+    color: #8052cf;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.hero-button {
+    display: inline-block;
+    padding: 13px 20px;
+    background: #8052cf;
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.hero-banner img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+@media (max-width: 700px) {
+    .hero-banner {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+
+    .hero-banner img {
+        height: 230px;
+    }
+
+    .main-nav {
+        gap: 10px;
+    }
+}
+/* ===== RecipeVision Premium Design ===== */
+
+:root {
+    --primary: #8060c7;
+    --primary-dark: #6244a3;
+    --lavender-light: #f5f0ff;
+    --text-dark: #302747;
+    --text-muted: #777087;
+    --border: #e9e1f6;
+    --white: #ffffff;
+}
+
+body {
+    background: linear-gradient(135deg, #fbf9ff, #f2edff);
+    color: var(--text-dark);
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.7;
+}
+
+.site-header {
+    position: relative;
+    padding: 20px 5%;
+    box-shadow: 0 4px 20px rgba(65, 43, 100, 0.06);
+}
+
+.brand {
+    font-size: 26px;
+    letter-spacing: -0.7px;
+}
+
+.brand-icon {
+    box-shadow: 0 4px 12px rgba(128, 96, 199, 0.15);
+}
+
+.main-nav a {
+    transition: color 0.25s ease;
+}
+
+.main-nav a:hover {
+    color: var(--primary);
+}
+
+.hero-banner {
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(91, 65, 145, 0.09);
+    transition: box-shadow 0.3s ease;
+}
+
+.hero-banner:hover {
+    box-shadow: 0 20px 55px rgba(91, 65, 145, 0.14);
+}
+
+.hero-banner h1 {
+    letter-spacing: -1.2px;
+}
+
+.hero-banner img {
+    box-shadow: 0 10px 28px rgba(48, 39, 71, 0.12);
+    transition: transform 0.4s ease;
+}
+
+.hero-banner img:hover {
+    transform: scale(1.02);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 28px;
+    margin-bottom: 26px;
+    box-shadow: 0 8px 30px rgba(65, 43, 100, 0.055);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.card:hover {
+    box-shadow: 0 14px 38px rgba(65, 43, 100, 0.10);
+}
+
+.card h2 {
+    color: var(--text-dark);
+    margin-top: 0;
+    font-size: 24px;
+}
+
+button,
+.hero-button {
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 13px 23px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+button:hover,
+.hero-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(98, 68, 163, 0.22);
+}
+
+input[type="file"],
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    border: 1px solid #ddd3f0;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff;
+    max-width: 100%;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid #c7b5f2;
+    border-color: var(--primary);
+}
+
+.food-image {
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(48, 39, 71, 0.12);
+    max-width: 100%;
+}
+
+.result-name {
+    color: var(--primary-dark);
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.nutrition div {
+    background: var(--lavender-light);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 15px;
+}
+
+.prediction-row {
+    background: #faf8ff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 8px 0;
+}
+
+.alert {
+    border-radius: 12px;
+    background: #f3edff;
+    border: 1px solid #dfd1fa;
+    padding: 14px;
+}
+
+footer {
+    padding: 25px 15px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .site-header {
+        padding: 18px;
+    }
+
+    .brand {
+        font-size: 22px;
+    }
+
+    .hero-banner {
+        margin: 20px auto;
+        padding: 22px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card h2 {
+        font-size: 21px;
+    }
+}
+/* ===== RecipeVision Animation Effects ===== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.hero-banner {
+    animation: fadeInUp 0.8s ease-out both;
+}
+
+.hero-banner img {
+    animation: fadeIn 1.1s ease-out both;
+}
+
+.card {
+    animation: fadeInUp 0.65s ease-out both;
+}
+
+.card:nth-of-type(2) {
+    animation-delay: 0.12s;
+}
+
+.brand-icon {
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+.hero-button,
+button {
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+}
+
+.hero-button:hover,
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(98, 68, 163, 0.25);
+}
+
+.food-image {
+    transition: transform 0.35s ease,
+                box-shadow 0.35s ease;
+}
+
+.food-image:hover {
+    transform: scale(1.025);
+    box-shadow: 0 14px 30px rgba(48, 39, 71, 0.16);
+}
+
+.main-nav a {
+    transition: color 0.25s ease;
+}
+
+.main-nav a:hover {
+    color: #a17be8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+/* ===== AI Food Analysis Loading Indicator ===== */
+
+.analysis-loading {
+    margin-top: 25px;
+    padding: 28px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f4ff, #ffffff);
+    border: 1px solid #e5d9ff;
+    border-radius: 20px;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.analysis-loading[hidden] {
+    display: none !important;
+}
+
+.loading-spinner {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 16px;
+    border: 5px solid #e8ddff;
+    border-top-color: #8060c7;
+    border-radius: 50%;
+    animation: analysisSpin 0.8s linear infinite;
+}
+
+@keyframes analysisSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.analysis-loading h3 {
+    margin: 8px 0;
+    color: #6244a3;
+}
+
+.analysis-loading p,
+.loading-note {
+    color: #777087;
+    font-size: 14px;
+}
+
+.loading-progress {
+    width: min(280px, 90%);
+    height: 7px;
+    margin: 18px auto;
+    overflow: hidden;
+    background: #e8ddff;
+    border-radius: 20px;
+}
+
+.loading-progress-bar {
+    width: 35%;
+    height: 100%;
+    background: linear-gradient(90deg, #8060c7, #b69bea);
+    border-radius: 20px;
+    animation: loadingProgress 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes loadingProgress {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(185%);
+    }
+}
+/* ===== Nutrition Dashboard ===== */
+
+.nutrition {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.nutrition div {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    padding: 22px 14px;
+    text-align: center;
+    background: linear-gradient(145deg, #ffffff, #f5f0ff);
+    border: 1px solid #e6dcfa;
+    border-radius: 20px;
+    box-shadow: 0 7px 20px rgba(90, 65, 145, 0.07);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.nutrition div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 13px 28px rgba(90, 65, 145, 0.14);
+}
+
+.nutrition div strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #74668e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.nutrition div span {
+    display: block;
+    color: #6244a3;
+    font-size: 25px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.nutrition div small {
+    display: block;
+    margin-top: 5px;
+    color: #888098;
+    font-size: 12px;
+}
+
+@media (max-width: 700px) {
+    .nutrition {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .nutrition div {
+        padding: 18px 10px;
+    }
+
+    .nutrition div span {
+        font-size: 22px;
+    }
+}
+/* Nutrition Dashboard Cards */
+
+.nutrition .nutrition-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 12px;
+    background: #ffffff;
+    border: 1px solid #eee6ff;
+    border-radius: 18px;
+    box-shadow: 0 5px 18px rgba(98, 68, 163, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nutrition .nutrition-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(98, 68, 163, 0.15);
+}
+
+.nutrition-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #eee6ff;
+    border-radius: 15px;
+    font-size: 25px;
+}
+
+.nutrition .nutrition-card strong {
+    text-align: center;
+    color: #514078;
+}
+
+.nutrition .nutrition-card span {
+    color: #6244a3;
+    font-size: 25px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.nutrition .nutrition-card small {
+    color: #888098;
+    font-size: 12px;
+}
+/* =================================
+   MOBILE-FRIENDLY RESPONSIVE DESIGN
+   ================================= */
+
+/* Make images and form elements fit their containers */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Tablet screens */
+@media (max-width: 900px) {
+    .container {
+        width: 92%;
+        max-width: 100%;
+    }
+
+    .nutrition {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .hero-banner {
+        padding: 35px 24px;
+    }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+    body {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .container {
+        width: 92%;
+        margin: 0 auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* Header */
+    .site-header {
+        padding: 14px 0;
+    }
+
+    .site-header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .site-header nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 16px;
+        width: 100%;
+    }
+
+    .site-header nav a {
+        font-size: 14px;
+    }
+
+    /* Hero banner */
+    .hero-banner {
+        padding: 25px 18px;
+        border-radius: 18px;
+        background-position: center;
+    }
+
+    .hero-banner h1 {
+        font-size: clamp(25px, 7vw, 34px);
+        line-height: 1.2;
+    }
+
+    .hero-banner p {
+        font-size: 14px;
+    }
+
+    /* Main content cards */
+    .card {
+        padding: 18px;
+        margin-bottom: 20px;
+        border-radius: 18px;
+    }
+
+    h1 {
+        overflow-wrap: anywhere;
+    }
+
+    h2 {
+        font-size: 23px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    /* Image upload form */
+    input[type="file"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    button,
+    input[type="submit"] {
+        min-height: 44px;
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    /* Nutrition dashboard */
+    .nutrition {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .nutrition .nutrition-card {
+        min-width: 0;
+        padding: 14px 8px;
+        overflow-wrap: anywhere;
+    }
+
+    .nutrition-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+    }
+
+    .nutrition .nutrition-card span {
+        font-size: 21px;
+    }
+
+    .nutrition .nutrition-card strong {
+        font-size: 13px;
+    }
+
+    /* Food images */
+    .food-image,
+    .result-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* Lists and chatbot responses */
+    ul,
+    ol {
+        padding-left: 22px;
+    }
+
+    pre,
+    code {
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+    }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+    .nutrition {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 14px;
+    }
+
+    .hero-banner {
+        padding: 20px 14px;
+    }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+/* Chatbot quick-question buttons */
+
+.quick-questions {
+    margin: 18px 0;
+}
+
+.quick-questions p {
+    color: #6244a3;
+    margin-bottom: 12px;
+}
+
+.quick-question-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.quick-question-buttons .quick-question {
+    margin-top: 0;
+    padding: 10px 14px;
+    background: #f0e8ff;
+    color: #6244a3;
+    border: 1px solid #dfd1fa;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.quick-question-buttons .quick-question:hover {
+    background: #e3d5ff;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .quick-question-buttons .quick-question {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}
 </style>
 </head>
 <body>
-<header>
-    <h1>Intelligent Recipe & Nutrition Vision Bot</h1>
-    <p>Discover food, explore recipes and learn about nutrition.</p>
+<header class="site-header">
+    <a href="/" class="brand">
+        <span class="brand-icon">🥗</span>
+        <span>Recipe<span class="brand-highlight">Vision</span></span>
+    </a>
+
+    <nav class="main-nav">
+        <a href="/">Home</a>
+        <a href="#upload">Image Upload</a>
+        <a href="#chatbot">AI Assistant</a>
+    </nav>
+
+    <span class="healthy-badge">🌿 Eat Smart, Live Well</span>
 </header>
 
+<section class="hero-banner">
+    <div>
+        <span class="hero-label">YOUR SMART KITCHEN ASSISTANT</span>
+        <h1>Discover the Story Behind Your Food</h1>
+        <p>Identify food, explore delicious recipes, and discover nutrition information with AI.</p>
+        <a class="hero-button" href="#upload">Explore Your Food ↓</a>
+    </div>
+
+    <div>
+        <img src="{{ url_for('static', filename='food-banner1.jpg') }}"
+             alt="Delicious food">
+    </div>
+</section>
 <main>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -250,23 +1078,61 @@ footer { text-align: center; color: var(--muted); padding: 0 20px 30px; }
       {% endif %}
     {% endwith %}
 
-    <section class="card">
-        <h2>Identify your food</h2>
-        <p class="muted">Upload a clear food photo to get a prediction and recipe suggestions.</p>
-        <form action="{{ url_for('analyze') }}" method="post"
-              enctype="multipart/form-data">
-            <label for="food_image">Choose a food image</label>
-            <input id="food_image" type="file" name="food_image"
-                   accept=".png,.jpg,.jpeg,.webp" required>
-            <button type="submit">Analyze Image</button>
-        </form>
-    </section>
+   <section class="card" id="upload">
+    <h2>Identify your food</h2>
+    <p class="muted">Upload a clear food photo to get a prediction and recipe suggestions.</p>
+
+    <form action="{{ url_for('analyze') }}" method="post"
+          enctype="multipart/form-data">
+        <label for="food_image">Choose a food image</label>
+        <input id="food_image" type="file" name="food_image"
+               accept=".png,.jpg,.jpeg,.webp" required>
+        <button type="submit">Analyze Image</button>
+    </form>
+
+    <!-- AI food analysis loading indicator -->
+    <div id="analysis-loading" class="analysis-loading"
+         role="status" aria-live="polite" hidden>
+        <div class="loading-spinner"></div>
+        <h3>Analyzing your food...</h3>
+        <p>Our AI is examining your image and finding matching recipes.</p>
+        <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+        </div>
+        <span class="loading-note">Please wait while we process your image.</span>
+    </div>
+</section>
         <section class="card" id="chatbot">
         <h2>Recipe & Nutrition Chatbot</h2>
         <p class="muted">
             Ask questions about ingredients, cooking instructions,
             and nutrition information.
         </p>
+        <div class="quick-questions">
+    <p><strong>Quick questions</strong></p>
+
+    <div class="quick-question-buttons">
+        <button type="button" class="quick-question"
+                data-question="Show calories and nutrition">
+            🔥 Show Nutrition
+        </button>
+
+        <button type="button" class="quick-question"
+                data-question="List the ingredients">
+            🥗 Ingredients
+        </button>
+
+        <button type="button" class="quick-question"
+                data-question="Give me the cooking instructions">
+            👩‍🍳 Cooking Instructions
+        </button>
+
+        <button type="button" class="quick-question"
+                data-question="What are the health benefits?">
+            💚 Health Benefits
+        </button>
+    </div>
+</div>
 
         <form action="{{ url_for('chat') }}" method="post">
             <label for="question">Your question</label>
@@ -352,13 +1218,30 @@ footer { text-align: center; color: var(--muted); padding: 0 20px 30px; }
         <h3>Nutrition information</h3>
         <p class="muted">Values depend on the recipe and serving size.</p>
         <div class="nutrition">
-        {% for key, value in result.nutrition.items() %}
-            <div>
-                <strong>{{ key.replace('_', ' ').title() }}</strong>
-                {{ value }}
+    {% for key, value in result.nutrition.items() %}
+        <div class="nutrition-card">
+            <div class="nutrition-icon">
+                {% if 'calorie' in key.lower() %}
+                    🔥
+                {% elif 'protein' in key.lower() %}
+                    💪
+                {% elif 'carb' in key.lower() %}
+                    🌾
+                {% elif 'fat' in key.lower() %}
+                    🥑
+                {% elif 'fibre' in key.lower() or 'fiber' in key.lower() %}
+                    🥗
+                {% else %}
+                    🍽️
+                {% endif %}
             </div>
-        {% endfor %}
+
+            <strong>{{ key.replace('_', ' ').title() }}</strong>
+            <span>{{ value }}</span>
+            <small>Per serving</small>
         </div>
+    {% endfor %}
+</div>
         {% endif %}
 
         {% if result.recipe.diet %}
@@ -380,6 +1263,55 @@ footer { text-align: center; color: var(--muted); padding: 0 20px 30px; }
 <footer>
     BCA Final-Year Project · ML · Neural Networks · Digital Image Processing · NLP
 </footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Food image analysis loading indicator
+    const form = document.querySelector('form[action*="/analyze"]');
+    const imageInput = document.getElementById("food_image");
+    const loading = document.getElementById("analysis-loading");
+
+    if (form && imageInput && loading) {
+        form.addEventListener("submit", function (event) {
+            if (!imageInput.files || imageInput.files.length === 0) {
+                event.preventDefault();
+                alert("Please choose a food image first.");
+                return;
+            }
+
+            loading.hidden = false;
+
+            const button = form.querySelector('button[type="submit"]');
+
+            if (button) {
+                button.disabled = true;
+                button.textContent = "Analyzing...";
+            }
+        });
+    }
+
+    // Chatbot quick-question buttons
+    const questionInput = document.getElementById("question");
+    const quickButtons = document.querySelectorAll(".quick-question");
+
+    quickButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            if (!questionInput) {
+                return;
+            }
+
+            questionInput.value = button.dataset.question || "";
+            questionInput.focus();
+
+            questionInput.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        });
+    });
+
+});
+</script>
 </body>
 </html>
 """
