@@ -1,0 +1,496 @@
+[
+  {
+    "name": "Vegetable Pulao",
+    "category": "Rice Dish",
+    "cuisine": "Indian",
+    "diet": "Vegetarian",
+    "description": "Vegetable Pulao is an aromatic rice dish cooked with mixed vegetables, whole spices, and herbs. It can be served for lunch or dinner with raita.",
+    "ingredients": [
+      "1 cup basmati rice",
+      "1/2 cup chopped carrots",
+      "1/4 cup green peas",
+      "1/4 cup chopped beans",
+      "1 medium onion, sliced",
+      "1 teaspoon ginger-garlic paste",
+      "1 tablespoon oil or ghee",
+      "1/2 teaspoon cumin seeds",
+      "2 cups water, approximately",
+      "Salt to taste",
+      "Whole spices and coriander leaves as desired"
+    ],
+    "instructions": [
+      "Wash the basmati rice thoroughly and soak it for 15 minutes. Drain before cooking.",
+      "Heat oil or ghee in a pot and add cumin seeds and whole spices.",
+      "Add sliced onion and cook until it becomes lightly golden.",
+      "Add ginger-garlic paste and cook briefly.",
+      "Add carrots, beans, and green peas. Saute for 3 to 4 minutes.",
+      "Add the drained rice and mix gently.",
+      "Add water and salt. Adjust the water according to the rice variety.",
+      "Cover and cook on low heat until the rice is tender and the water is absorbed.",
+      "Let the pulao rest for 5 minutes, fluff gently, and garnish with coriander."
+    ],
+    "prep_time": 15,
+    "cook_time": 25,
+    "servings": 2,
+    "difficulty": "Easy",
+    "nutrition": {
+      "calories": 320,
+      "protein": 7,
+      "carbs": 58,
+      "fat": 7,
+      "fibre": 4
+    },
+    "health_benefits": [
+      "Rice provides carbohydrates for energy.",
+      "Carrots and peas provide fibre and various micronutrients.",
+      "Mixed vegetables contribute to dietary variety."
+    ],
+    "allergens": [],
+    "substitutions": [
+      "Use other vegetables such as cauliflower or sweet corn.",
+      "Use oil instead of ghee for a dairy-free version."
+    ],
+    "tags": [
+      "rice",
+      "vegetarian",
+      "lunch",
+      "dinner",
+      "vegetable pulao",
+      "pulav"
+    ]
+  },
+  {
+    "name": "Masala Dosa",
+    "category": "Breakfast",
+    "cuisine": "South Indian",
+    "diet": "Vegetarian",
+    "description": "Masala Dosa is a thin, crispy dosa made from fermented rice and urad dal batter and filled with a spiced potato mixture.",
+    "ingredients": [
+      "2 cups prepared dosa batter",
+      "2 medium potatoes",
+      "1 medium onion, sliced",
+      "1 tablespoon oil",
+      "1/2 teaspoon mustard seeds",
+      "1/4 teaspoon turmeric powder",
+      "1 green chilli, chopped",
+      "Curry leaves",
+      "Salt to taste",
+      "Water as needed"
+    ],
+    "instructions": [
+      "Boil the potatoes until tender, peel them, and mash them roughly.",
+      "Heat oil in a pan and add mustard seeds and curry leaves.",
+      "Add sliced onion and green chilli. Saute until the onion softens.",
+      "Add turmeric, salt, and mashed potatoes. Mix well and cook for a few minutes.",
+      "Heat a flat dosa pan and lightly grease it.",
+      "Pour a ladle of dosa batter onto the pan and spread it into a thin circle.",
+      "Cook until the underside becomes golden and crisp.",
+      "Place some potato filling in the centre and fold the dosa.",
+      "Serve hot with chutney and sambar."
+    ],
+    "prep_time": 15,
+    "cook_time": 20,
+    "servings": 2,
+    "difficulty": "Medium",
+    "nutrition": {
+      "calories": 280,
+      "protein": 6,
+      "carbs": 43,
+      "fat": 9,
+      "fibre": 4
+    },
+    "health_benefits": [
+      "Rice and potatoes provide carbohydrates.",
+      "Urad dal contributes plant protein.",
+      "Fermented batter is used in traditional dosa preparation."
+    ],
+    "allergens": [],
+    "substitutions": [
+      "Use less oil when cooking the dosa.",
+      "Adjust chilli according to your preferred spice level."
+    ],
+    "tags": [
+      "dosa",
+      "potato",
+      "breakfast",
+      "vegetarian",
+      "south indian",
+      "masala dosa"
+    ]
+  },
+  {
+    "name": "Idli",
+    "category": "Breakfast",
+    "cuisine": "South Indian",
+    "diet": "Vegetarian",
+    "description": "Idli is a soft, steamed South Indian dish made using fermented rice and urad dal batter. It is commonly served with sambar and chutney.",
+    "ingredients": [
+      "2 cups prepared idli batter",
+      "A little oil for greasing the moulds",
+      "Water for steaming"
+    ],
+    "instructions": [
+      "Prepare fermented idli batter or use ready-made batter.",
+      "Lightly grease the idli moulds.",
+      "Pour batter into each mould without filling it completely.",
+      "Add water to the steamer and bring it to a boil.",
+      "Place the idli stand inside the steamer.",
+      "Steam for approximately 10 to 15 minutes, depending on the mould size.",
+      "Check that the idlis are cooked through.",
+      "Allow them to cool slightly before removing them from the moulds.",
+      "Serve warm with sambar and chutney."
+    ],
+    "prep_time": 10,
+    "cook_time": 15,
+    "servings": 2,
+    "difficulty": "Easy",
+    "nutrition": {
+      "calories": 150,
+      "protein": 5,
+      "carbs": 30,
+      "fat": 1,
+      "fibre": 2
+    },
+    "health_benefits": [
+      "Steaming requires little added oil.",
+      "Rice provides carbohydrates.",
+      "Urad dal contributes protein."
+    ],
+    "allergens": [],
+    "substitutions": [
+      "Serve with vegetable sambar for additional vegetables.",
+      "Use a suitable alternative batter if a dietary restriction requires it."
+    ],
+    "tags": [
+      "idli",
+      "rice",
+      "breakfast",
+      "vegetarian",
+      "steamed food",
+      "south indian"
+    ]
+  },
+  {
+    "name": "Paneer Butter Masala",
+    "category": "Curry",
+    "cuisine": "North Indian",
+    "diet": "Vegetarian",
+    "description": "Paneer Butter Masala is a creamy tomato-based curry prepared with paneer, butter, cream, and aromatic Indian spices.",
+    "ingredients": [
+      "200 g paneer, cubed",
+      "2 medium tomatoes, chopped",
+      "1 medium onion, chopped",
+      "1 tablespoon butter",
+      "2 tablespoons cream",
+      "1 teaspoon ginger-garlic paste",
+      "1 tablespoon oil",
+      "1/2 teaspoon red chilli powder",
+      "1/4 teaspoon turmeric powder",
+      "1/2 teaspoon garam masala",
+      "Salt to taste",
+      "Water as needed",
+      "Fresh coriander leaves"
+    ],
+    "instructions": [
+      "Heat oil in a pan and saute the chopped onion until soft.",
+      "Add ginger-garlic paste and cook briefly.",
+      "Add tomatoes, turmeric, chilli powder, and salt.",
+      "Cook until the tomatoes become soft and form a thick mixture.",
+      "Allow the mixture to cool slightly, then blend until smooth.",
+      "Return the sauce to the pan.",
+      "Add butter, garam masala, and a little water if needed.",
+      "Add paneer cubes and simmer gently for 3 to 5 minutes.",
+      "Stir in cream and warm through without boiling vigorously.",
+      "Garnish with coriander and serve with roti, naan, or rice."
+    ],
+    "prep_time": 15,
+    "cook_time": 25,
+    "servings": 2,
+    "difficulty": "Medium",
+    "nutrition": {
+      "calories": 380,
+      "protein": 15,
+      "carbs": 14,
+      "fat": 29,
+      "fibre": 3
+    },
+    "health_benefits": [
+      "Paneer provides protein and calcium.",
+      "Tomatoes contribute vitamin C and other micronutrients.",
+      "The nutritional profile depends on the quantities of butter and cream used."
+    ],
+    "allergens": [
+      "Milk"
+    ],
+    "substitutions": [
+      "Use less butter and cream to reduce the amount of added fat.",
+      "Use a suitable plant-based alternative if avoiding dairy."
+    ],
+    "tags": [
+      "paneer",
+      "tomato",
+      "curry",
+      "vegetarian",
+      "north indian",
+      "paneer butter masala"
+    ]
+  },
+  {
+    "name": "Aloo Gobi",
+    "category": "Vegetable Curry",
+    "cuisine": "Indian",
+    "diet": "Vegetarian",
+    "description": "Aloo Gobi is a traditional Indian dish made with potatoes, cauliflower, onions, tomatoes, and aromatic spices.",
+    "ingredients": [
+      "2 medium potatoes, cubed",
+      "2 cups cauliflower florets",
+      "1 medium onion, chopped",
+      "1 medium tomato, chopped",
+      "1 tablespoon oil",
+      "1 teaspoon ginger-garlic paste",
+      "1/2 teaspoon cumin seeds",
+      "1/4 teaspoon turmeric powder",
+      "1/2 teaspoon coriander powder",
+      "Salt to taste",
+      "Water as needed",
+      "Fresh coriander leaves"
+    ],
+    "instructions": [
+      "Wash the vegetables thoroughly.",
+      "Peel and cube the potatoes and separate the cauliflower into florets.",
+      "Heat oil in a pan and add cumin seeds.",
+      "Add onion and saute until softened.",
+      "Add ginger-garlic paste and cook briefly.",
+      "Add tomato, turmeric, coriander powder, and salt.",
+      "Cook until the tomato softens.",
+      "Add potatoes and cauliflower and mix gently.",
+      "Add a small amount of water and cover the pan.",
+      "Cook on low to medium heat, stirring occasionally, until the vegetables are tender.",
+      "Garnish with coriander and serve with roti or rice."
+    ],
+    "prep_time": 15,
+    "cook_time": 25,
+    "servings": 2,
+    "difficulty": "Easy",
+    "nutrition": {
+      "calories": 220,
+      "protein": 5,
+      "carbs": 28,
+      "fat": 10,
+      "fibre": 5
+    },
+    "health_benefits": [
+      "Cauliflower provides fibre and vitamin C.",
+      "Potatoes provide carbohydrates and potassium.",
+      "Using a variety of vegetables contributes to a varied diet."
+    ],
+    "allergens": [],
+    "substitutions": [
+      "Reduce the oil if desired.",
+      "Add peas for additional variety."
+    ],
+    "tags": [
+      "potato",
+      "cauliflower",
+      "vegetarian",
+      "curry",
+      "aloo gobi",
+      "lunch",
+      "dinner"
+    ]
+  },
+  {
+    "name": "Vegetable Upma",
+    "category": "Breakfast",
+    "cuisine": "South Indian",
+    "diet": "Vegetarian",
+    "description": "Vegetable Upma is a savoury South Indian dish made with roasted semolina, vegetables, mustard seeds, curry leaves, and mild spices.",
+    "ingredients": [
+      "1 cup semolina (rava)",
+      "1 small onion, chopped",
+      "1/2 cup mixed vegetables",
+      "1 green chilli, chopped",
+      "1 teaspoon mustard seeds",
+      "1 teaspoon oil or ghee",
+      "2 1/2 cups water, approximately",
+      "Salt to taste",
+      "Curry leaves",
+      "Fresh coriander leaves"
+    ],
+    "instructions": [
+      "Dry-roast the semolina over low heat until lightly aromatic, then set aside.",
+      "Heat oil or ghee in a pan.",
+      "Add mustard seeds and allow them to crackle.",
+      "Add curry leaves, chopped onion, and green chilli.",
+      "Add the mixed vegetables and cook until they begin to soften.",
+      "Pour in water and add salt.",
+      "Bring the water to a boil.",
+      "Slowly add the roasted semolina while stirring continuously to prevent lumps.",
+      "Reduce the heat and cover the pan.",
+      "Cook until the water is absorbed and the semolina becomes soft.",
+      "Garnish with coriander and serve warm."
+    ],
+    "prep_time": 10,
+    "cook_time": 15,
+    "servings": 2,
+    "difficulty": "Easy",
+    "nutrition": {
+      "calories": 250,
+      "protein": 6,
+      "carbs": 42,
+      "fat": 7,
+      "fibre": 4
+    },
+    "health_benefits": [
+      "Semolina provides carbohydrates.",
+      "Mixed vegetables contribute fibre and micronutrients.",
+      "The amount of added oil affects the total fat content."
+    ],
+    "allergens": [
+      "Wheat (gluten)"
+    ],
+    "substitutions": [
+      "Use a suitable gluten-free grain instead of semolina if needed.",
+      "Add more vegetables according to preference."
+    ],
+    "tags": [
+      "upma",
+      "rava",
+      "breakfast",
+      "vegetarian",
+      "south indian",
+      "vegetable upma"
+    ]
+  },
+  {
+    "name": "Kadai Paneer",
+    "category": "Curry",
+    "cuisine": "North Indian",
+    "diet": "Vegetarian",
+    "description": "Kadai Paneer is a North Indian curry made with paneer, capsicum, tomatoes, onions, and freshly ground coriander and cumin spices.",
+    "ingredients": [
+      "200 g paneer, cut into cubes",
+      "1 medium capsicum, chopped",
+      "2 medium tomatoes, chopped",
+      "1 medium onion, sliced",
+      "1 teaspoon ginger-garlic paste",
+      "1 tablespoon oil",
+      "1 teaspoon coriander seeds",
+      "1/2 teaspoon cumin seeds",
+      "1/2 teaspoon red chilli powder",
+      "1/4 teaspoon turmeric powder",
+      "1/2 teaspoon garam masala",
+      "Salt to taste",
+      "Fresh coriander leaves",
+      "Water as needed"
+    ],
+    "instructions": [
+      "Dry-roast coriander seeds and cumin seeds until fragrant.",
+      "Crush the roasted spices coarsely and set them aside.",
+      "Heat oil in a pan and saute the sliced onion until lightly golden.",
+      "Add ginger-garlic paste and cook for about one minute.",
+      "Add chopped tomatoes, turmeric, chilli powder, salt, and crushed spices.",
+      "Cook until the tomatoes soften and form a thick masala.",
+      "Add capsicum and a little water.",
+      "Cook until the capsicum is slightly tender but still holds its shape.",
+      "Add paneer cubes and garam masala.",
+      "Mix gently and simmer for 3 to 5 minutes.",
+      "Garnish with fresh coriander and serve with roti, naan, or rice."
+    ],
+    "prep_time": 15,
+    "cook_time": 25,
+    "servings": 2,
+    "difficulty": "Medium",
+    "nutrition": {
+      "calories": 350,
+      "protein": 16,
+      "carbs": 18,
+      "fat": 24,
+      "fibre": 3
+    },
+    "health_benefits": [
+      "Paneer contributes protein and calcium.",
+      "Capsicum and tomatoes provide various micronutrients.",
+      "The dish's total fat depends on the paneer and oil quantities."
+    ],
+    "allergens": [
+      "Milk"
+    ],
+    "substitutions": [
+      "Use less oil if desired.",
+      "Adjust chilli powder to control the spice level.",
+      "Use a suitable plant-based paneer alternative if avoiding dairy."
+    ],
+    "tags": [
+      "paneer",
+      "capsicum",
+      "tomato",
+      "indian curry",
+      "vegetarian",
+      "kadai paneer",
+      "karahi paneer"
+    ]
+  },
+  {
+    "name": "Tomato Curry",
+    "category": "Curry",
+    "cuisine": "Indian",
+    "diet": "Vegetarian",
+    "description": "Tomato Curry is a simple, tangy Indian curry prepared with tomatoes, onions, ginger, garlic, and aromatic spices.",
+    "ingredients": [
+      "3 medium tomatoes, chopped",
+      "1 medium onion, chopped",
+      "2 garlic cloves, minced",
+      "1 teaspoon grated ginger",
+      "1 tablespoon oil",
+      "1/2 teaspoon cumin seeds",
+      "1/4 teaspoon turmeric powder",
+      "1/2 teaspoon coriander powder",
+      "Salt to taste",
+      "Water as needed",
+      "Fresh coriander leaves"
+    ],
+    "instructions": [
+      "Wash and chop the tomatoes and onion.",
+      "Heat oil in a pan and add cumin seeds.",
+      "Add the onion and saute until softened.",
+      "Add garlic and ginger and cook briefly.",
+      "Add chopped tomatoes, turmeric, coriander powder, and salt.",
+      "Cook until the tomatoes become soft.",
+      "Add a little water and simmer until the curry reaches the desired consistency.",
+      "Mash or blend the mixture if a smoother texture is preferred.",
+      "Garnish with coriander leaves.",
+      "Serve with rice, chapati, or dosa."
+    ],
+    "prep_time": 10,
+    "cook_time": 20,
+    "servings": 2,
+    "difficulty": "Easy",
+    "nutrition": {
+      "calories": 140,
+      "protein": 3,
+      "carbs": 15,
+      "fat": 8,
+      "fibre": 4
+    },
+    "health_benefits": [
+      "Tomatoes provide vitamin C and lycopene.",
+      "Onions contribute flavour and small amounts of micronutrients.",
+      "The dish can be served with other foods to make a balanced meal."
+    ],
+    "allergens": [],
+    "substitutions": [
+      "Reduce chilli or spices to suit your preference.",
+      "Use less oil if desired.",
+      "Add cooked vegetables or legumes for variety."
+    ],
+    "tags": [
+      "tomato",
+      "curry",
+      "vegetarian",
+      "tomato curry",
+      "lunch",
+      "dinner"
+    ]
+  }
+]

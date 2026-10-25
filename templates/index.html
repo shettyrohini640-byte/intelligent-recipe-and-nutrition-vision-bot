@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Recipe & Nutrition Vision Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="site-header">
+    <a class="brand" href="#home">
+        <span class="brand-icon">🥗</span>
+        <span>
+            <strong>Recipe & Nutrition</strong>
+            <small>VISION BOT</small>
+        </span>
+    </a>
+
+    <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#upload">Image Upload</a>
+        <a href="#recipes">Recipes</a>
+        <a href="#nutrition">Nutrition</a>
+        <a href="#assistant">AI Assistant</a>
+    </nav>
+
+    <span class="healthy-badge">🌿 Eat Smart, Live Well</span>
+</header>
+
+<main id="home" class="dashboard">
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">YOUR PERSONAL FOOD COMPANION</span>
+            <h1>Discover What's<br><span>on Your Plate.</span></h1>
+
+            <p>
+                Identify food from images, discover delicious recipes,
+                explore estimated nutrition, and get cooking guidance
+                from your intelligent food assistant.
+            </p>
+
+            <div class="hero-actions">
+                <a class="button button-primary" href="#upload">
+                    📷 Analyze Your Food
+                </a>
+                <a class="button button-secondary" href="#recipes">
+                    Explore Recipes →
+                </a>
+            </div>
+
+            <div class="technology-list">
+                <span>📷 Image Processing</span>
+                <span>🧠 Neural Networks</span>
+                <span>🍲 Recipe Finder</span>
+                <span>💬 NLP Assistant</span>
+            </div>
+        </div>
+
+        <div class="hero-art" aria-label="Healthy food">
+            <div class="hero-food-emoji">🥗</div>
+            <span class="floating-note">Fresh ideas, smarter meals ✨</span>
+        </div>
+    </section>
+
+    <!-- ERROR MESSAGE -->
+    {% if error %}
+    <div class="alert alert-error" role="alert">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- IMAGE UPLOAD SECTION -->
+    <section id="upload" class="section-block">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">LET'S GET COOKING</span>
+                <h2>What's on your plate?</h2>
+                <p>Upload a food photo and let AI help you explore it.</p>
+            </div>
+            <span class="section-icon">📸</span>
+        </div>
+
+        <div class="upload-card">
+            <form method="POST" action="/" enctype="multipart/form-data">
+                <label class="upload-dropzone" for="foodImage">
+                    <span class="upload-icon">☁️</span>
+                    <strong>Choose your food image</strong>
+                    <span>Click below to browse your device</span>
+                    <span class="upload-hint">JPG, JPEG, PNG or WEBP</span>
+                </label>
+
+                <input
+                    type="file"
+                    id="foodImage"
+                    name="foodImage"
+                    accept="image/png,image/jpeg,image/webp"
+                    required
+                >
+
+                <div class="preview-container">
+                    <img
+                        id="preview"
+                        alt="Selected food preview"
+                        style="display:none; max-width:100%; max-height:280px; object-fit:contain;"
+                    >
+                </div>
+
+                <div class="form-actions">
+                    <button
+                        class="button button-secondary"
+                        type="button"
+                        onclick="previewImage()"
+                    >
+                        Preview Image
+                    </button>
+
+                    <button class="button button-primary" type="submit">
+                        ✨ Analyze Food
+                    </button>
+                </div>
+            </form>
+
+            <p class="privacy-note">
+                🌱 Your food analysis uses the model configured in this project.
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOD PREDICTION RESULTS -->
+    {% if result %}
+    <section class="section-block results-section">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">AI ANALYSIS</span>
+                <h2>Your food results</h2>
+                <p>Here's what your food recognition system found.</p>
+            </div>
+            <span class="section-icon">🔍</span>
+        </div>
+
+        <div class="result-grid">
+            <article class="panel result-panel">
+                <span class="result-label">PREDICTED FOOD</span>
+
+                <h3>
+                    {{ result.prediction | replace('_', ' ') | title }}
+                </h3>
+
+                {% if image_url %}
+                <img
+                    class="result-image"
+                    src="{{ url_for('static', filename=image_url) }}"
+                    alt="Uploaded food"
+                >
+                {% endif %}
+
+                {% if result.confidence is not none %}
+                    <p class="confidence">
+                        Model confidence: {{ result.confidence }}%
+                    </p>
+
+                    {% if result.uncertain %}
+                    <div class="alert alert-error" role="alert">
+                        The model may have identified the food incorrectly.
+                        Please check the alternative predictions below.
+                    </div>
+                    {% else %}
+                    <p class="muted">
+                        Confidence does not guarantee that the food
+                        has been identified correctly.
+                    </p>
+                    {% endif %}
+                {% else %}
+                    <p class="muted">Food selection confirmed by you.</p>
+                {% endif %}
+
+                
+                {% if result.alternatives %}
+                <div class="alternative-section">
+                    <h4>Other possible matches</h4>
+                    <ul class="alternative-list">
+                        {% for item in result.alternatives %}
+                        {% if item.label | lower | replace(' ', '_') != result.label_key %}
+                        <li>
+                            <span>{{ item.label | replace('_', ' ') | title }}</span>
+                            <span>
+                                {% if item.confidence is number %}
+                                    {{ "%.2f"|format(item.confidence) }}%
+                                {% else %}
+                                    {{ item.confidence }}
+                                {% endif %}
+                            </span>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+
+                <form method="POST" action="/">
+                    <label for="correct_food">Choose the correct food:</label>
+
+                    <select name="food_name" id="correct_food" required>
+                        <option value="">Choose food</option>
+                        <option value="Aloo Gobi">Aloo Gobi</option>
+                        <option value="Kadai Paneer">Kadai Paneer</option>
+                        <option value="Masala Dosa">Masala Dosa</option>
+                        <option value="Idli">Idli</option>
+                        <option value="Vegetable Upma">Vegetable Upma</option>
+                        <option value="Vegetable Pulao">Vegetable Pulao</option>
+                        <option value="Tomato Curry">Tomato Curry</option>
+                    </select>
+
+                    <button class="button button-primary" type="submit">
+                        Correct Food
+                    </button>
+                </form>
+            </article>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- RECIPES SECTION -->
+    <section id="recipes" class="section-block">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">COOK SOMETHING DELICIOUS</span>
+                <h2>Explore Recipes</h2>
+                <p>Discover ingredients and cooking ideas for your meals.</p>
+            </div>
+            <span class="section-icon">🍲</span>
+        </div>
+
+        <div class="panel">
+            <p>
+                Upload a food image or use the correction dropdown to select
+                a food. Your recipe database is stored in
+                <code>data/recipes.json</code>.
+            </p>
+            <p>
+                After identifying a food, visit the nutrition section below
+                or ask the recipe assistant for cooking instructions.
+            </p>
+            <a class="button button-secondary" href="#assistant">
+                Ask About a Recipe →
+            </a>
+        </div>
+    </section>
+
+    <!-- NUTRITION SECTION -->
+    <section id="nutrition" class="section-block">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">UNDERSTAND YOUR FOOD</span>
+                <h2>Nutrition Information</h2>
+                <p>Explore estimated calories, protein, carbohydrates and fat.</p>
+            </div>
+            <span class="section-icon">🥑</span>
+        </div>
+
+        {% if result and result.nutrition %}
+        <div class="feature-grid">
+            <article class="panel feature-card">
+                <span class="feature-icon">🔥</span>
+                <h3>Calories</h3>
+                <p>{{ result.nutrition.calories }} kcal</p>
+            </article>
+
+            <article class="panel feature-card">
+                <span class="feature-icon">💪</span>
+                <h3>Protein</h3>
+                <p>{{ result.nutrition.protein }} g</p>
+            </article>
+
+            <article class="panel feature-card">
+                <span class="feature-icon">🌾</span>
+                <h3>Carbohydrates</h3>
+                <p>{{ result.nutrition.carbs }} g</p>
+            </article>
+
+            <article class="panel feature-card">
+                <span class="feature-icon">🥜</span>
+                <h3>Fat</h3>
+                <p>{{ result.nutrition.fat }} g</p>
+            </article>
+        </div>
+        {% else %}
+        <div class="panel">
+            <p>
+                Nutrition information will appear here when provided by your
+                recipe database. Values are estimates and depend on serving size.
+            </p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- RECIPE ASSISTANT SECTION -->
+    <section id="assistant" class="section-block assistant-section">
+        <div class="assistant-intro">
+            <span class="assistant-avatar">🤖</span>
+
+            <div>
+                <span class="eyebrow">YOUR COOKING COMPANION</span>
+                <h2>Ask your recipe assistant</h2>
+                <p>
+                    Need cooking steps, ingredients, or nutrition details?
+                    Type a question below.
+                </p>
+            </div>
+        </div>
+
+        <div class="chat-panel">
+            <div class="chat-welcome">
+                <span class="chat-bot-icon">🌿</span>
+
+                <div>
+                    <strong>Hello, food explorer!</strong>
+                    <p>
+                        Ask about Masala Dosa, Idli, Vegetable Pulao,
+                        Tomato Curry, or another recipe in your collection.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quick-questions">
+                <button
+                    type="button"
+                    onclick="document.getElementById('question').value='How do I make Masala Dosa?'; askQuestion()"
+                >
+                    How do I make Masala Dosa?
+                </button>
+
+                <button
+                    type="button"
+                    onclick="document.getElementById('question').value='What are the ingredients for Idli?'; askQuestion()"
+                >
+                    Ingredients for Idli
+                </button>
+
+                <button
+                    type="button"
+                    onclick="document.getElementById('question').value='How many calories are in Vegetable Pulao?'; askQuestion()"
+                >
+                    Vegetable Pulao calories
+                </button>
+
+                <button
+                    type="button"
+                    onclick="document.getElementById('question').value='How long does Tomato Curry take to cook?'; askQuestion()"
+                >
+                    Tomato Curry cooking time
+                </button>
+            </div>
+
+            <form
+                class="chat-form"
+                onsubmit="event.preventDefault(); askQuestion();"
+            >
+                <label for="question" class="visually-hidden">
+                    Ask a recipe question
+                </label>
+
+                <input
+                    type="text"
+                    id="question"
+                    placeholder="Ask about ingredients, recipes or nutrition..."
+                    autocomplete="off"
+                >
+
+                <button class="button button-primary" type="submit">
+                    Ask →
+                </button>
+            </form>
+
+            <div id="answer" class="chat-answer" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <!-- TECHNOLOGY FEATURES -->
+    <section class="section-block">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">BUILT WITH AI TECHNOLOGY</span>
+                <h2>Smarter Food Discovery</h2>
+                <p>Four key parts work together in your project.</p>
+            </div>
+        </div>
+
+        <div class="feature-grid">
+            <article class="panel feature-card">
+                <span class="feature-icon">📷</span>
+                <h3>Digital Image Processing</h3>
+                <p>Prepare food images for analysis by your configured model.</p>
+            </article>
+
+            <article class="panel feature-card">
+                <span class="feature-icon">🧠</span>
+                <h3>ML & Neural Networks</h3>
+                <p>Predict the food category using your trained model.</p>
+            </article>
+
+            <article class="panel feature-card">
+                <span class="feature-icon">🥘</span>
+                <h3>Recipe & Nutrition</h3>
+                <p>Explore matching recipes, ingredients, and nutrition estimates.</p>
+            </article>
+
+            <article class="panel feature-card">
+                <span class="feature-icon">💬</span>
+                <h3>Recipe Assistant</h3>
+                <p>Ask questions about ingredients, cooking instructions, and time.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- CLOSING BANNER -->
+    <section class="closing-banner">
+        <span>🌱</span>
+
+        <div>
+            <h2>Eat smart. Cook happy.</h2>
+            <p>Discover new recipes, one plate at a time.</p>
+        </div>
+
+        <span class="closing-decoration">🥗</span>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <p>
+        Intelligent Recipe & Nutrition Vision Bot
+        <span>•</span> BCA Final-Year Project
+    </p>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
