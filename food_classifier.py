@@ -3,17 +3,11 @@ import json
 import gc
 
 import torch
-torch.set_num_threads(1)
-torch.set_num_interop_threads(1)
 from PIL import Image, ImageOps
 from torch import nn
 from torchvision import models, transforms
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(BASE_DIR, "models")
-MODEL_PATH = os.path.join(MODEL_DIR, "food_classifier.pth")
-CLASSES_PATH = os.path.join(MODEL_DIR, "food_classes.json")
-
+# Limit CPU thread usage to reduce resource overhead.
 torch.set_num_threads(1)
 
 try:
@@ -21,14 +15,22 @@ try:
 except RuntimeError:
     pass
 
+# Project paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+MODEL_PATH = os.path.join(MODEL_DIR, "food_classifier.pth")
+CLASSES_PATH = os.path.join(MODEL_DIR, "food_classes.json")
+
 device = torch.device("cpu")
 
+# Check required files
 if not os.path.isfile(MODEL_PATH):
     raise FileNotFoundError(f"Model not found: {MODEL_PATH}")
 
 if not os.path.isfile(CLASSES_PATH):
     raise FileNotFoundError(f"Class names not found: {CLASSES_PATH}")
 
+# Load class names
 with open(CLASSES_PATH, "r", encoding="utf-8") as file:
     class_names = json.load(file)
 
@@ -37,21 +39,25 @@ if not isinstance(class_names, list) or not class_names:
 
 print("Loading MobileNetV3-Small...", flush=True)
 
+# Build the model architecture
 model = models.mobilenet_v3_small(weights=None)
 input_features = model.classifier[3].in_features
 model.classifier[3] = nn.Linear(input_features, len(class_names))
 
+# Load trained weights
 state_dict = torch.load(
     MODEL_PATH,
-    map_location="cpu",
+    map_location=device,
     weights_only=True
 )
 
 model.load_state_dict(state_dict)
 del state_dict
 
+model.to(device)
 model.eval()
 
+# Image preprocessing
 image_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -72,13 +78,19 @@ def predict_food(image_path):
     image_tensor = None
     outputs = None
     probabilities = None
+    scores = None
+    indices = None
 
     try:
+        # Open and resize the image before creating the tensor.
         with Image.open(image_path) as original:
             image = ImageOps.exif_transpose(original).convert("RGB")
+            image.thumbnail((224, 224))
             image = image.resize((224, 224))
-            image_tensor = image_transform(image).unsqueeze(0)
 
+            image_tensor = image_transform(image).unsqueeze(0).to(device)
+
+        # Run inference without calculating gradients.
         with torch.inference_mode():
             outputs = model(image_tensor)
             probabilities = torch.softmax(outputs, dim=1)[0]
@@ -110,14 +122,14 @@ def predict_food(image_path):
         return result
 
     finally:
-        if image_tensor is not None:
-            del image_tensor
-        if outputs is not None:
-            del outputs
-        if probabilities is not None:
-            del probabilities
-
+        # Release temporary objects.
+        del image_tensor
+        del outputs
+        del probabilities
+        del scores
+        del indices
         gc.collect()
+
 
 if __name__ == "__main__":
     image_path = input(
