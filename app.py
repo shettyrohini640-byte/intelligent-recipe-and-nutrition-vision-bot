@@ -1436,6 +1436,7 @@ def analyze():
 
         print("STEP 1: CALLING predict_food()", flush=True)
         prediction = predict_food(absolute_path)
+        print("STEP 2: PREDICTION FINISHED", flush=True)
         print("TOP FOOD PREDICTIONS:", prediction.get("alternatives"), flush=True)
         print("MODEL RESULT:", prediction, flush=True)
 
