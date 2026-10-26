@@ -7,10 +7,11 @@ from PIL import Image, ImageOps
 from torch import nn
 from torchvision import models, transforms
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+MODEL_PATH = os.path.join(MODEL_DIR, "food_classifier.pth")
+CLASSES_PATH = os.path.join(MODEL_DIR, "food_classes.json")
 
-print("FOOD CLASSIFIER FILE LOADED", flush=True)
-
-# Reduce CPU thread usage to help on low-memory hosting.
 torch.set_num_threads(1)
 
 try:
@@ -18,23 +19,13 @@ try:
 except RuntimeError:
     pass
 
-
-# Project paths
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(BASE_DIR, "models")
-
-MODEL_PATH = os.path.join(MODEL_DIR, "food_classifier.pth")
-CLASSES_PATH = os.path.join(MODEL_DIR, "food_classes.json")
-
-# Render free instances normally run inference on the CPU.
 device = torch.device("cpu")
 
+if not os.path.isfile(MODEL_PATH):
+    raise FileNotFoundError(f"Model not found: {MODEL_PATH}")
 
-# Load food category names.
 if not os.path.isfile(CLASSES_PATH):
-    raise FileNotFoundError(
-        f"Class names file not found: {CLASSES_PATH}"
-    )
+    raise FileNotFoundError(f"Class names not found: {CLASSES_PATH}")
 
 with open(CLASSES_PATH, "r", encoding="utf-8") as file:
     class_names = json.load(file)
@@ -42,25 +33,12 @@ with open(CLASSES_PATH, "r", encoding="utf-8") as file:
 if not isinstance(class_names, list) or not class_names:
     raise ValueError("food_classes.json must contain a non-empty list.")
 
-if not os.path.isfile(MODEL_PATH):
-    raise FileNotFoundError(
-        f"Trained model not found: {MODEL_PATH}"
-    )
+print("Loading MobileNetV3-Small...", flush=True)
 
-
-print("Loading trained food model on CPU...", flush=True)
-
-# Build the same model architecture used during training.
 model = models.mobilenet_v3_small(weights=None)
-
 input_features = model.classifier[3].in_features
+model.classifier[3] = nn.Linear(input_features, len(class_names))
 
-model.classifier[3] = nn.Linear(
-    input_features,
-    len(class_names)
-)
-
-# Load the trained weights directly onto the CPU.
 state_dict = torch.load(
     MODEL_PATH,
     map_location="cpu",
@@ -72,7 +50,6 @@ del state_dict
 
 model.eval()
 
-# Use the same preprocessing as the training/validation pipeline.
 image_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -82,85 +59,61 @@ image_transform = transforms.Compose([
     )
 ])
 
-print("TRAINED FOOD MODEL LOADED SUCCESSFULLY", flush=True)
-print("Food classes:", class_names, flush=True)
+print("Neural-network model loaded.", flush=True)
+print("Classes:", class_names, flush=True)
 
 
 def predict_food(image_path):
-    """Predict one of the trained food categories."""
-
     if not os.path.isfile(image_path):
-        raise FileNotFoundError(
-            f"Image not found: {image_path}"
-        )
+        raise FileNotFoundError(f"Image not found: {image_path}")
 
     image_tensor = None
     outputs = None
     probabilities = None
 
     try:
-        # DIP: correct orientation and convert to RGB.
         with Image.open(image_path) as original:
-            image = ImageOps.exif_transpose(original)
-            image = image.convert("RGB")
-
-            # Resize before creating the tensor.
+            image = ImageOps.exif_transpose(original).convert("RGB")
             image = image.resize((224, 224))
-
             image_tensor = image_transform(image).unsqueeze(0)
 
-            image.close()
-
-        # Neural-network inference without gradient calculations.
         with torch.inference_mode():
             outputs = model(image_tensor)
             probabilities = torch.softmax(outputs, dim=1)[0]
 
             top_count = min(5, len(class_names))
-            scores, indices = torch.topk(
-                probabilities,
-                top_count
-            )
+            scores, indices = torch.topk(probabilities, top_count)
 
-            # Copy the small result list before releasing tensors.
             score_values = scores.tolist()
             index_values = indices.tolist()
 
-        alternatives = []
-
-        for score, index in zip(score_values, index_values):
-            alternatives.append({
+        alternatives = [
+            {
                 "label": class_names[index].replace("_", " "),
                 "confidence": round(score * 100, 2)
-            })
+            }
+            for score, index in zip(score_values, index_values)
+        ]
 
         best = alternatives[0]
 
-        # Keep uncertain predictions clearly marked.
-        uncertain = best["confidence"] < 80
-
-        print("TOP FOOD PREDICTIONS:", alternatives, flush=True)
-        print("PREDICTED FOOD:", best["label"], flush=True)
-        print("CONFIDENCE:", best["confidence"], flush=True)
-        print("PREDICTION UNCERTAIN:", uncertain, flush=True)
-
-        return {
+        result = {
             "prediction": best["label"],
             "confidence": best["confidence"],
             "alternatives": alternatives,
-            "uncertain": uncertain
+            "uncertain": best["confidence"] < 80
         }
 
-    finally:
-        # Release temporary image and inference tensors.
-        del image_tensor
+        print("TOP PREDICTIONS:", alternatives, flush=True)
+        return result
 
+    finally:
+        if image_tensor is not None:
+            del image_tensor
         if outputs is not None:
             del outputs
-
         if probabilities is not None:
             del probabilities
-
         gc.collect()
 
 
@@ -170,7 +123,6 @@ if __name__ == "__main__":
     ).strip().strip('"')
 
     try:
-        result = predict_food(image_path)
-        print("\nFinal result:", result)
+        print("\nPrediction result:", predict_food(image_path))
     except Exception as error:
-        print("Error testing image:", error)
+        print("Prediction error:", error)

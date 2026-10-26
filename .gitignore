@@ -9,3 +9,13 @@ __pycache__/
 Thumbs.db
 dataset/
 static/uploads/
+# Temporary food images
+Aalu_Gobi_Curry.jpg
+Aalu_Matar_Curry.jpg
+South_Indian_Spice_Fried_Curry_with_Tomato_Chutney.jpg
+temproary.img
+
+# Local model backups
+models/food_classifier_backup.pth
+models/food_classifier_before_improvement.pth
+models/food_classifier.joblib

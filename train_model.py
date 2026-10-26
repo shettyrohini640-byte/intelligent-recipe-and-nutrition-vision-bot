@@ -1,4 +1,3 @@
-
 import os
 import json
 import copy
@@ -9,13 +8,7 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, models
 
-
-# --------------------------------------------------
-# 1. PROJECT SETTINGS
-# --------------------------------------------------
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 TRAIN_DIR = os.path.join(BASE_DIR, "dataset", "train")
 VAL_DIR = os.path.join(BASE_DIR, "dataset", "validation")
 MODEL_DIR = os.path.join(BASE_DIR, "models")
@@ -26,16 +19,10 @@ BATCH_SIZE = 8
 EPOCHS = 15
 PATIENCE = 4
 
-device = torch.device(
-    "cuda" if torch.cuda.is_available() else "cpu"
-)
+torch.set_num_threads(1)
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Device:", device)
-
-
-# --------------------------------------------------
-# 2. IMAGE TRANSFORMATIONS
-# --------------------------------------------------
 
 train_transform = transforms.Compose([
     transforms.Resize((224, 224)),
@@ -62,48 +49,22 @@ val_transform = transforms.Compose([
     )
 ])
 
-
-# --------------------------------------------------
-# 3. LOAD THE DATASETS
-# --------------------------------------------------
-
 if not os.path.isdir(TRAIN_DIR):
-    raise FileNotFoundError(
-        f"Training folder not found: {TRAIN_DIR}"
-    )
+    raise FileNotFoundError(f"Training folder not found: {TRAIN_DIR}")
 
 if not os.path.isdir(VAL_DIR):
-    raise FileNotFoundError(
-        f"Validation folder not found: {VAL_DIR}"
-    )
+    raise FileNotFoundError(f"Validation folder not found: {VAL_DIR}")
 
-train_dataset = datasets.ImageFolder(
-    TRAIN_DIR,
-    transform=train_transform
-)
-
-val_dataset = datasets.ImageFolder(
-    VAL_DIR,
-    transform=val_transform
-)
+train_dataset = datasets.ImageFolder(TRAIN_DIR, transform=train_transform)
+val_dataset = datasets.ImageFolder(VAL_DIR, transform=val_transform)
 
 class_names = train_dataset.classes
 
 if val_dataset.classes != class_names:
-    raise ValueError(
-        "Training and validation folders must contain "
-        "the same class folders."
-    )
-
-if len(class_names) < 2:
-    raise ValueError(
-        "At least two food categories are required."
-    )
+    raise ValueError("Training and validation classes do not match.")
 
 if len(train_dataset) == 0 or len(val_dataset) == 0:
-    raise ValueError(
-        "The training and validation datasets cannot be empty."
-    )
+    raise ValueError("Training and validation datasets cannot be empty.")
 
 train_loader = DataLoader(
     train_dataset,
@@ -123,81 +84,58 @@ print("Classes:", class_names)
 print("Training images:", len(train_dataset))
 print("Validation images:", len(val_dataset))
 
-
-# --------------------------------------------------
-# 4. LOAD THE PRETRAINED NEURAL NETWORK
-# --------------------------------------------------
-
 model = models.mobilenet_v3_small(
     weights=models.MobileNet_V3_Small_Weights.DEFAULT
 )
 
-# Freeze the feature layers first.
 for parameter in model.features.parameters():
     parameter.requires_grad = False
 
-# Fine-tune the last three feature blocks.
 for parameter in model.features[-3:].parameters():
     parameter.requires_grad = True
 
-# Train the classifier.
+input_features = model.classifier[3].in_features
+model.classifier[3] = nn.Linear(input_features, len(class_names))
+
 for parameter in model.classifier.parameters():
     parameter.requires_grad = True
 
-# Match the classifier output to our food categories.
-input_features = model.classifier[3].in_features
-
-model.classifier[3] = nn.Linear(
-    input_features,
-    len(class_names)
-)
-
 model = model.to(device)
 
+from collections import Counter
 
-# --------------------------------------------------
-# 5. LOSS FUNCTION AND OPTIMIZER
-# --------------------------------------------------
+class_counts = Counter(train_dataset.targets)
 
-criterion = nn.CrossEntropyLoss()
+class_weights = torch.tensor(
+    [
+        len(train_dataset) / (len(class_names) * class_counts[i])
+        for i in range(len(class_names))
+    ],
+    dtype=torch.float32
+).to(device)
+
+criterion = nn.CrossEntropyLoss(weight=class_weights)
+
+print("Class weights:", class_weights.cpu().tolist())
 
 optimizer = Adam([
-    {
-        "params": model.features[-3:].parameters(),
-        "lr": 0.00001
-    },
-    {
-        "params": model.classifier.parameters(),
-        "lr": 0.0001
-    }
+    {"params": model.features[-3:].parameters(), "lr": 0.00001},
+    {"params": model.classifier.parameters(), "lr": 0.0001}
 ])
-
-
-# --------------------------------------------------
-# 6. TRAINING AND EARLY STOPPING
-# --------------------------------------------------
 
 best_accuracy = -1.0
 best_weights = copy.deepcopy(model.state_dict())
 epochs_without_improvement = 0
 
 for epoch in range(EPOCHS):
-
     print(f"\nEpoch {epoch + 1}/{EPOCHS}")
 
     for phase in ("train", "validation"):
-
         if phase == "train":
             model.train()
-
-            # Keep the frozen feature layers in evaluation mode.
             model.features.eval()
-
-            # Train only the last three feature blocks.
             model.features[-3:].train()
-
             loader = train_loader
-
         else:
             model.eval()
             loader = val_loader
@@ -207,17 +145,13 @@ for epoch in range(EPOCHS):
         total_samples = 0
 
         for images, labels in loader:
-
             images = images.to(device)
             labels = labels.to(device)
-
             optimizer.zero_grad()
 
             with torch.set_grad_enabled(phase == "train"):
-
                 outputs = model(images)
                 loss = criterion(outputs, labels)
-
                 predictions = outputs.argmax(dim=1)
 
                 if phase == "train":
@@ -225,13 +159,8 @@ for epoch in range(EPOCHS):
                     optimizer.step()
 
             count = labels.size(0)
-
             total_loss += loss.item() * count
-
-            total_correct += (
-                predictions == labels
-            ).sum().item()
-
+            total_correct += (predictions == labels).sum().item()
             total_samples += count
 
         epoch_loss = total_loss / total_samples
@@ -242,58 +171,33 @@ for epoch in range(EPOCHS):
             f"accuracy: {accuracy:.1%}"
         )
 
-        # Save the best-performing validation checkpoint.
         if phase == "validation":
-
             if accuracy > best_accuracy:
-
                 best_accuracy = accuracy
-                best_weights = copy.deepcopy(
-                    model.state_dict()
-                )
-
+                best_weights = copy.deepcopy(model.state_dict())
                 epochs_without_improvement = 0
-
                 print("Validation accuracy improved.")
-
             else:
                 epochs_without_improvement += 1
 
-    # This check is outside the phase loop, so it stops
-    # the outer training loop correctly.
     if epochs_without_improvement >= PATIENCE:
-
-        print(
-            "\nEarly stopping: validation accuracy "
-            "has not improved for "
-            f"{PATIENCE} consecutive epochs."
-        )
-
+        print("\nEarly stopping.")
         break
-
-
-# --------------------------------------------------
-# 7. SAVE THE BEST MODEL
-# --------------------------------------------------
 
 model.load_state_dict(best_weights)
 
-model_path = os.path.join(
-    MODEL_DIR,
-    "food_classifier.pth"
+torch.save(
+    model.state_dict(),
+    os.path.join(MODEL_DIR, "food_classifier.pth")
 )
 
-classes_path = os.path.join(
-    MODEL_DIR,
-    "food_classes.json"
-)
-
-torch.save(model.state_dict(), model_path)
-
-with open(classes_path, "w", encoding="utf-8") as file:
+with open(
+    os.path.join(MODEL_DIR, "food_classes.json"),
+    "w",
+    encoding="utf-8"
+) as file:
     json.dump(class_names, file, indent=4)
 
 print("\nTraining complete!")
 print(f"Best validation accuracy: {best_accuracy:.1%}")
-print(f"Model saved: {model_path}")
-print(f"Classes saved: {classes_path}")
+print("Neural-network model saved.")
