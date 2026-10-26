@@ -2,72 +2,45 @@ import os
 import json
 import gc
 
-import torch
+import numpy as np
+import onnxruntime as ort
 from PIL import Image, ImageOps
-from torch import nn
-from torchvision import models, transforms
 
-# Limit CPU thread usage to reduce resource overhead.
-torch.set_num_threads(1)
-
-try:
-    torch.set_num_interop_threads(1)
-except RuntimeError:
-    pass
-
-# Project paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "models")
-MODEL_PATH = os.path.join(MODEL_DIR, "food_classifier.pth")
+
+MODEL_PATH = os.path.join(MODEL_DIR, "food_classifier.onnx")
 CLASSES_PATH = os.path.join(MODEL_DIR, "food_classes.json")
 
-device = torch.device("cpu")
-
-# Check required files
 if not os.path.isfile(MODEL_PATH):
-    raise FileNotFoundError(f"Model not found: {MODEL_PATH}")
+    raise FileNotFoundError(f"ONNX model not found: {MODEL_PATH}")
 
 if not os.path.isfile(CLASSES_PATH):
     raise FileNotFoundError(f"Class names not found: {CLASSES_PATH}")
 
-# Load class names
 with open(CLASSES_PATH, "r", encoding="utf-8") as file:
     class_names = json.load(file)
 
 if not isinstance(class_names, list) or not class_names:
     raise ValueError("food_classes.json must contain a non-empty list.")
 
-print("Loading MobileNetV3-Small...", flush=True)
+# Limit ONNX Runtime's CPU threads to reduce resource usage.
+session_options = ort.SessionOptions()
+session_options.intra_op_num_threads = 1
+session_options.inter_op_num_threads = 1
+session_options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
 
-# Build the model architecture
-model = models.mobilenet_v3_small(weights=None)
-input_features = model.classifier[3].in_features
-model.classifier[3] = nn.Linear(input_features, len(class_names))
+print("Loading ONNX food model...", flush=True)
 
-# Load trained weights
-state_dict = torch.load(
+session = ort.InferenceSession(
     MODEL_PATH,
-    map_location=device,
-    weights_only=True
+    sess_options=session_options,
+    providers=["CPUExecutionProvider"]
 )
 
-model.load_state_dict(state_dict)
-del state_dict
+input_name = session.get_inputs()[0].name
 
-model.to(device)
-model.eval()
-
-# Image preprocessing
-image_transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize(
-        mean=[0.485, 0.456, 0.406],
-        std=[0.229, 0.224, 0.225]
-    )
-])
-
-print("Neural-network model loaded.", flush=True)
+print("ONNX model loaded successfully.", flush=True)
 print("Classes:", class_names, flush=True)
 
 
@@ -75,38 +48,59 @@ def predict_food(image_path):
     if not os.path.isfile(image_path):
         raise FileNotFoundError(f"Image not found: {image_path}")
 
-    image_tensor = None
+    image_array = None
+    input_tensor = None
     outputs = None
     probabilities = None
-    scores = None
-    indices = None
 
     try:
-        # Open and resize the image before creating the tensor.
         with Image.open(image_path) as original:
             image = ImageOps.exif_transpose(original).convert("RGB")
-            image.thumbnail((224, 224))
             image = image.resize((224, 224))
 
-            image_tensor = image_transform(image).unsqueeze(0).to(device)
+            image_array = np.asarray(
+                image, dtype=np.float32
+            ) / 255.0
 
-        # Run inference without calculating gradients.
-        with torch.inference_mode():
-            outputs = model(image_tensor)
-            probabilities = torch.softmax(outputs, dim=1)[0]
+        # Match the normalization used during training.
+        mean = np.array(
+            [0.485, 0.456, 0.406], dtype=np.float32
+        )
+        std = np.array(
+            [0.229, 0.224, 0.225], dtype=np.float32
+        )
 
-            top_count = min(5, len(class_names))
-            scores, indices = torch.topk(probabilities, top_count)
+        image_array = (image_array - mean) / std
 
-            score_values = scores.tolist()
-            index_values = indices.tolist()
+        # Convert HWC image layout to NCHW.
+        input_tensor = np.transpose(
+            image_array, (2, 0, 1)
+        )[None, :, :, :].astype(np.float32)
+
+        outputs = session.run(
+            None,
+            {input_name: input_tensor}
+        )
+
+        logits = outputs[0][0]
+
+        # Stable softmax.
+        shifted_logits = logits - np.max(logits)
+        exp_values = np.exp(shifted_logits)
+        probabilities = exp_values / np.sum(exp_values)
+
+        top_indices = np.argsort(probabilities)[::-1][
+            :min(5, len(class_names))
+        ]
 
         alternatives = [
             {
-                "label": class_names[index].replace("_", " "),
-                "confidence": round(score * 100, 2)
+                "label": class_names[int(index)].replace("_", " "),
+                "confidence": round(
+                    float(probabilities[index]) * 100, 2
+                )
             }
-            for score, index in zip(score_values, index_values)
+            for index in top_indices
         ]
 
         best = alternatives[0]
@@ -119,15 +113,14 @@ def predict_food(image_path):
         }
 
         print("TOP PREDICTIONS:", alternatives, flush=True)
+
         return result
 
     finally:
-        # Release temporary objects.
-        del image_tensor
+        del image_array
+        del input_tensor
         del outputs
         del probabilities
-        del scores
-        del indices
         gc.collect()
 
 
