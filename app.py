@@ -11,6 +11,8 @@ from food_classifier import predict_food, class_names
 from chatbot import answer_question
 
 app = Flask(__name__)
+
+app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 app.secret_key = "recipe-vision-bot-local-key"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

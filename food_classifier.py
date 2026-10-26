@@ -114,8 +114,8 @@ def predict_food(image_path):
             del outputs
         if probabilities is not None:
             del probabilities
-        gc.collect()
 
+        gc.collect()
 
 if __name__ == "__main__":
     image_path = input(
