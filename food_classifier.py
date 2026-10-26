@@ -3,6 +3,8 @@ import json
 import gc
 
 import torch
+torch.set_num_threads(1)
+torch.set_num_interop_threads(1)
 from PIL import Image, ImageOps
 from torch import nn
 from torchvision import models, transforms
